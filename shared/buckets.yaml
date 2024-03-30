@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFormation for codefolio project showcasing.
+
+Resources:
+  ProjectS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: tycrowe-codefolio-bucket
+
+  # Store the bucket arn in SSM
+  ProjectS3BucketNameParameterArn:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: /codefolio/bucket-arn
+      Type: String
+      Value: !GetAtt ProjectS3Bucket.Arn
+    DependsOn: ProjectS3Bucket
+
+  ProjectS3BucketNameParameterName:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: /codefolio/bucket-name
+      Type: String
+      Value: !Ref ProjectS3Bucket
+    DependsOn: ProjectS3Bucket
+
+Outputs:
+  ProjectS3BucketName:
+    Value: !Ref ProjectS3Bucket
